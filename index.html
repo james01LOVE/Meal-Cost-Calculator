@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="lo">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ໂປຣແກຮມຫານເງິນ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Libertinus+Keyboard&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: sans-serif;
+            margin: auto;
+            padding: 5px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .person {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 5px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .person input {
+            padding: 6px 6px;
+            flex: 1;
+        }
+
+        button {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        .pay {
+            color: red;
+        }
+
+        .receive {
+            color: rgb(0, 64, 255);
+        }
+
+        .even {
+            color: rgb(5, 150, 0);
+        }
+
+        .remove {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 6px;
+            background: #ff0000;
+            color: #fff;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .remove:hover,
+        .remove:active {
+            background: #c53030;
+            color: #fff;
+        }
+
+        .highlight {
+            text-decoration: underline;
+            font-weight: bold;
+        }
+
+        /* ฟอนต์ Libertinus Keyboard */
+        .libertinus-keyboard-regular {
+            font-family: "Libertinus Keyboard", system-ui;
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        /* ลายน้ำกลางเว็บ */
+        .watermark {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            font-size: 300px;
+            color: rgba(0, 0, 0, 0.035);
+            /* โปร่งใสเล็กน้อย */
+            pointer-events: none;
+            /* ไม่ขัดกับคลิกหรือเลือกข้อความ */
+            z-index: 9999;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 700px) {
+            body {
+                padding: 5px;
+            }
+
+            .person {
+                flex-direction: row;
+                gap: 5px;
+                align-items: center;
+            }
+
+            input[type="text"] {
+                flex: 7;
+                min-width: 0;
+                font-size: 18px;
+                padding: 10px;
+            }
+
+            input[type="number"] {
+                flex: 3;
+                min-width: 0;
+                font-size: 18px;
+                padding: 10px;
+            }
+
+            button.remove {
+                flex: none;
+                width: 44px;
+                height: 44px;
+                font-size: 20px;
+                border-radius: 8px;
+            }
+
+            .result {
+                font-size: 18px;
+            }
+
+            .watermark {
+                font-size: 150px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="watermark libertinus-keyboard-regular">TSR</div>
+
+    <h1>💰 ໂປຣແກຮມຫານເງິນ</h1>
+
+    <div id="inputs">
+        <!-- ช่องกรอกเริ่มต้น 6 คน -->
+        <div class="person"> <input type="text" value="ฮาว" /> <input type="number" value="20" /> <button class="remove"
+                onclick="removePerson(this)">X</button> </div>
+        <div class="person"> <input type="text" value="เจม" /> <input type="number" value="20" /> <button class="remove"
+                onclick="removePerson(this)">X</button> </div>
+        <div class="person"> <input type="text" value="โล่" /> <input type="number" value="20" /> <button class="remove"
+                onclick="removePerson(this)">X</button> </div>
+        <div class="person"> <input type="text" value="เป่ง" /> <input type="number" value="12" /> <button
+                class="remove" onclick="removePerson(this)">X</button> </div>
+        <div class="person"> <input type="text" value="โจ" /> <input type="number" value="0" /> <button class="remove"
+                onclick="removePerson(this)">X</button> </div>
+        <div class="person"> <input type="text" value="เจ" /> <input type="number" value="0" /> <button class="remove"
+                onclick="removePerson(this)">X</button> </div>
+    </div>
+
+    <button onclick="addPerson()">➕ ເພີ່ມຄົນ</button>
+    <button onclick="calculate()">📊 ຄຳນວນ</button>
+    <button onclick="resetForm()">♻️ ຣີເຊັດ</button>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        function addPerson() {
+            const div = document.createElement("div");
+            div.className = "person";
+            div.innerHTML = `
+        <input type="text" placeholder="ຊື່" />
+        <input type="number" value="0" />
+        <button class="remove" onclick="removePerson(this)">X</button>`;
+            document.getElementById("inputs").appendChild(div);
+        }
+
+        function removePerson(button) {
+            button.parentElement.remove();
+        }
+
+        function resetForm() {
+            const peopleDivs = document.querySelectorAll("#inputs .person");
+            peopleDivs.forEach(div => div.children[1].value = 0);
+            document.getElementById("result").innerHTML = "";
+        }
+
+        function calculate() {
+            const peopleDivs = document.querySelectorAll("#inputs .person");
+            const expenses = {};
+            peopleDivs.forEach(div => {
+                const name = div.children[0].value.trim();
+                const paid = parseFloat(div.children[1].value) || 0;
+                if (name) expenses[name] = paid;
+            });
+
+            const names = Object.keys(expenses);
+            if (names.length === 0) {
+                document.getElementById("result").innerHTML = "<p style='color:red'>\"ຄວຍ\" ຍັງບໍ່ໄດ້ໃສ່ຊື່ໃຜເທື່ອ</p>";
+                return;
+            }
+
+            const total = Object.values(expenses).reduce((a, b) => a + b, 0);
+            const share = total / names.length;
+
+            const needToPay = [];
+            const needToReceive = [];
+            const even = [];
+
+            for (const [name, paid] of Object.entries(expenses)) {
+                const balance = paid - share;
+                if (balance > 0) needToReceive.push({ name, amount: balance });
+                else if (balance < 0) needToPay.push({ name, amount: -balance });
+                else even.push(name);
+            }
+
+            needToPay.sort((a, b) => a.amount - b.amount);
+            needToReceive.sort((a, b) => a.amount - b.amount);
+
+            let result = `<p>ລາຄາອາຫານລວມ: <span class="highlight">${total} ກີບ</span><br>
+                          ແບ່ງ ${names.length} ຄົນ ຄົນເລີກ: <span class="highlight">${share.toFixed(2)} ກີບ</span></p>`;
+
+            if (needToPay.length)
+                result += `<p class="pay">💸 ຄົນທີ່ຕ້ອງຈ່າຍເພີ່ມ:<br>${needToPay.map(p => `${p.name} ຕ້ອງຈ່າຍ ${p.amount.toFixed(2)} ກີບ`).join("<br>")}</p>`;
+            if (needToReceive.length)
+                result += `<p class="receive">🤑 ຄົນທີ່ຕ້ອງໄດ້ເງິນຄືນ:<br>${needToReceive.map(r => `${r.name} ຕ້ອງໄດ້ເງິນຄືນ ${r.amount.toFixed(2)} ກີບ`).join("<br>")}</p>`;
+            if (even.length)
+                result += `<p class="even">👌 ຄົນທີ່ບໍ່ຈ້ອງເຮິດຫຍັງ:<br>${even.join("<br>")}</p>`;
+
+            document.getElementById("result").innerHTML = result;
+        }
+    </script>
+</body>
+
+</html>
